@@ -1,0 +1,187 @@
+:root {
+  --gravity: 0deg;
+  --displaySize: min(512px, 90vw);
+  --roundedness: 100%;
+}
+
+html {
+  background: #eee;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  color: black;
+}
+@media (prefers-color-scheme: dark) {
+  html {
+    background: #111;
+    color: white;
+  }
+}
+
+.noUserSelect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.canvasComponent {
+  border-radius: var(--roundedness);
+  width: var(--displaySize);
+  height: var(--displaySize);
+  position: relative;
+  transition: transform 600ms; /* this value inherited as descendant's values manipulated by JS */
+  transition-timing-function: cubic-bezier(0.355, 1.275, 0.775, 1.015);
+}
+
+.canvasComponent::before {
+  content: "";
+  /* canvasShadow */
+  box-shadow: 0 3em 6em -4em #0009;
+  border-radius: inherit;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.canvasContainer {
+  overflow: hidden;
+  transform: rotate(var(--gravity)) translateZ(0);
+  transform-origin: center;
+  transition: inherit; /* Manipulated by JS on user interaction */
+  will-change: transform;
+  width: inherit;
+  height: inherit;
+  z-index: 1;
+  position: relative;
+  border-radius: inherit;
+  background-color: #aaa1;
+}
+
+canvas {
+  /* image-rendering: auto; */
+  /* image-rendering: crisp-edges; */
+  image-rendering: pixelated;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: relative;
+  will-change: transform;
+  transform: rotate(0deg) translateZ(0);
+  border-radius: inherit;
+}
+
+button {
+  background-size: contain;
+  width: 3rem;
+  height: 3rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: #aaa1;
+  border-radius: 100%;
+  line-height: 1;
+  will-change: transform;
+  transition: transform 400ms;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 5;
+}
+button:focus,
+button:hover {
+  background: #555a;
+}
+
+button svg {
+  object-fit: contain;
+  width: 2rem;
+  height: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  button svg {
+    filter: invert(1);
+  }
+}
+button.gyro-active {
+  background-color: rgb(64, 213, 131);
+}
+.icon--active {
+  display: none;
+}
+button.gyro-active .icon--active {
+  display: block;
+}
+button.gyro-active .icon--inactive {
+  display: none;
+}
+
+.gyroreadout {
+  display: grid;
+  display: none;
+  place-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #555a;
+  border-radius: 100%;
+}
+
+.keyboardLayout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.2em;
+  width: 6em;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+@keyframes keyFlash {
+  0% {
+    background-color: hsla(90, 50%, 50%, 0%);
+  }
+  5% {
+    background-color: hsla(90, 50%, 50%, 100%);
+  }
+  100% {
+    background-color: hsla(90, 50%, 50%, 0%);
+  }
+}
+.key {
+  --size: 2.3em;
+  width: var(--size);
+  height: calc(var(--size) * 0.75);
+  /* border: 2px solid #fffc; */
+  background-color: #7777;
+  border-radius: 0.35em;
+  text-align: center;
+}
+.key span {
+  filter: sepia(100%) hue-rotate(90deg) contrast(200%) brightness(90%);
+}
+.key.flash {
+  animation: keyFlash 800ms 1;
+}
+.key--up {
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+}
+.key--left {
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
+}
+.key--down {
+  grid-row: 2 / 3;
+  grid-column: 2 / 3;
+}
+.key--right {
+  grid-row: 2 / 3;
+  grid-column: 3 / 4;
+}
